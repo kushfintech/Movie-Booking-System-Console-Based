@@ -1,3 +1,5 @@
+import inquirer
+
 from controllers.movie_session import load_sessions, add_session
 from controllers.movie import (get_movie_id_using_interactive_console,
                                get_movie_using_id,
@@ -11,12 +13,16 @@ from controllers.movie_session import (show_all_sessions, get_session_id_using_i
 def manage_sessions_menu():
     while True:
         print("\nManage Movies Sessions")
-        print("1. Add Session")
-        print("2. View All Sessions")
-        print("3. Cancel Session")
-        print("4. Remove Session")
-        print("5. Back")
-        choice = input("Enter choice: ")
+        menu_choices = [("Add Session", "1"), ("View All Sessions", "2"), ("Cancel Session", "3"),
+                        ("Remove Session", "4"), ("Back", "5")]
+        question = [
+            inquirer.List('menu',
+                          message="Select an Option:",
+                          choices=menu_choices,
+                          carousel=True)
+        ]
+        answers = inquirer.prompt(question)
+        choice = answers['menu']
         if choice == "1":
             movie_id = get_movie_id_using_interactive_console()
             if movie_id:

@@ -1,3 +1,5 @@
+import inquirer
+
 from controllers.staff import (fetch_all_staffs, create_account, login_to_account, view_all_staffs, delete_account, get_staff_id,
                                update_profile)
 from views.movie import manage_movie_menu
@@ -25,9 +27,16 @@ def check_staff_exists_or_not():
 def staff_non_logged_in_menu():
     while True:
         print("\n MRS>Staffs")
-        print("1. Login")
-        print("2. Back")
-        choice = input("Enter choice: ")
+        menu_choices = [("Login", "1"), ("Back", "2")]
+        question = [
+            inquirer.List('menu',
+                          message="Select an Option:",
+                          choices=menu_choices,
+                          carousel=True)
+        ]
+        answers = inquirer.prompt(question)
+        choice = answers['menu']
+
         if choice == "1":
             email = input("Enter your email address: ")
             password = input("Enter your password: ")
@@ -43,12 +52,16 @@ def staff_non_logged_in_menu():
 def manage_staff_menu():
     while True:
         print("\n MRS>Manage Staffs")
-        print("1. View Staffs")
-        print("2. Add Staff")
-        print("3. Update Staff")
-        print("4. Remove Staff")
-        print("5. Back")
-        choice = input("Enter your choice: ")
+        menu_choices = [("View Staffs", "1"), ("Add Staffs", "2"), ("Update Staff", "3"),
+                        ("Remove Staff", "4"), ("Cancel", "5")]
+        question = [
+            inquirer.List('menu',
+                          message="Select an Option:",
+                          choices=menu_choices,
+                          carousel=True)
+        ]
+        answers = inquirer.prompt(question)
+        choice = answers['menu']
         if choice == "1":
             view_all_staffs()
         elif choice == "2":
@@ -61,7 +74,7 @@ def manage_staff_menu():
             if password == c_password:
                 create_account(name=name, email=email, password=password, address=address, country=country)
             else:
-                print("Both password does not matched")
+                print("New password and confirm password should be same")
         elif choice == "3":
             staff_id = get_staff_id()
             if staff_id:
@@ -72,29 +85,32 @@ def manage_staff_menu():
                 success = update_profile(staff_id=staff_id, name=name, email=email, address=address, country=country,
                                          password=None)
                 if success:
-                    print(f"Staff with Id: {staff_id} updated successfully!")
+                    print(f"Staff for Id: {staff_id} updated!")
         elif choice == "4":
             staff_id = get_staff_id()
             if staff_id:
                 success = delete_account(staff_id)
                 if success:
-                    print(f"Staff with Id: {staff_id} deleted successfully!")
+                    print(f"Staff for Id: {staff_id} deleted!")
         elif choice == "5":
             break
         else:
-            print("Invalid choice, please try again.")
+            print("Bad choice!, Try again.")
 
 
 def staff_logged_in_menu():
     while True:
         print("\n MRS>Staffs>Menu")
-        print("1. Staffs")
-        print("2. Customers")
-        print("3. Movies")
-        print("4. Movie Shows")
-        print("5. Reservations")
-        print("6. Back")
-        choice = input("Enter choice: ")
+        menu_choices = [("Staffs", "1"), ("Customers", "2"), ("Movies", "3"),
+                        ("Movie Shows", "4"), ("Reservations", "5"), ("Back", "6")]
+        question = [
+            inquirer.List('menu',
+                          message="Select an Option:",
+                          choices=menu_choices,
+                          carousel=True)
+        ]
+        answers = inquirer.prompt(question)
+        choice = answers['menu']
         if choice == "1":
             manage_staff_menu()
         elif choice == "2":
@@ -108,5 +124,5 @@ def staff_logged_in_menu():
         elif choice == "6":
             return
         else:
-            print("Invalid choice, please try again.")
+            print("Bad choice! Try again.")
 

@@ -1,3 +1,5 @@
+import inquirer
+
 from controllers.movie import (add_movie, delete_movie,
                                view_all_movies, fetch_all_movies, get_movie_id_using_interactive_console
                                )
@@ -11,11 +13,15 @@ from controllers.customer import get_cust_id
 def reservation_menu():
     while True:
         print("\nMovie Reservation System")
-        print("1. Add Movie")
-        print("2. View All Movies")
-        print("3. Remove Movie")
-        print("4. Back")
-        choice = input("Enter choice: ")
+        menu_choices = [("Add Movie", "1"), ("View All Movies", "2"), ("Remove Movie", "3"), ("Back", "4")]
+        question = [
+            inquirer.List('menu',
+                          message="Select an Option:",
+                          choices=menu_choices,
+                          carousel=True)
+        ]
+        answers = inquirer.prompt(question)
+        choice = answers['menu']
         if choice == "1":
             title = input("Enter movie title: ")
             duration = input("Enter movie duration(in minutes): ")
@@ -31,24 +37,27 @@ def reservation_menu():
                 movie_id = int(input("Enter movie ID to remove: "))
                 delete_movie(movie_id)
             else:
-                print("No Movies Found to Delete.")
+                print("Movies not Found for Delete.")
 
         elif choice == "4":
             break
         else:
-            print("Invalid choice, please try again.")
+            print("Bad choice! Try again.")
 
 
 def manage_reservation_menu():
     while True:
         print("\nManage Reservations")
-        print("1. View Reservations")
-        print("2. Add New Reservation")
-        print("3. Search Reservations")
-        print("4. Cancel Reservation")
-        print("5. Delete Reservation")
-        print("6. Back")
-        choice = input("Enter option: ")
+        menu_choices = [("View Reservations", "1"), ("Add New Reservation", "2"), ("Search Reservations", "3"),
+                        ("Cancel Reservation", "4"), ("Delete Reservation", "5"), ("Back", "6")]
+        question = [
+            inquirer.List('menu',
+                          message="Select an Option:",
+                          choices=menu_choices,
+                          carousel=True)
+        ]
+        answers = inquirer.prompt(question)
+        choice = answers['menu']
         if choice == "1":
             view_bookings()
         elif choice == "2":
@@ -71,12 +80,12 @@ def manage_reservation_menu():
                                         break
 
                                 else:
-                                    print("No Seats Selected")
+                                    print("You didn't selected any seat")
 
         elif choice == "3":
             while True:
-                print("Search Reservations")
-                reservation_id = input("Enter your reservation id to search and C to Cancel: ")
+                print("Search for Reservations")
+                reservation_id = input("Enter your reservation id in order to search or C to Cancel: ")
                 if reservation_id:
                     if reservation_id.lower() == "c":
                         break
